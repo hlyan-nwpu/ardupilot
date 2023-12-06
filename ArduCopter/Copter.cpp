@@ -603,6 +603,9 @@ void Copter::three_hz_loop()
 // one_hz_loop - runs at 1Hz
 void Copter::one_hz_loop()
 {
+    gcs().send_text(MAV_SEVERITY_CRITICAL, 
+                "Current altitude: %.1fm",
+                 copter.flightmode->get_alt_above_ground_cm() / 100.0f);
     if (should_log(MASK_LOG_ANY)) {
         Log_Write_Data(LogDataID::AP_STATE, ap.value);
     }
