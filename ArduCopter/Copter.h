@@ -69,7 +69,8 @@
 #include <AC_Sprayer/AC_Sprayer.h>          // Crop sprayer library
 #include <AP_ADSB/AP_ADSB.h>                // ADS-B RF based collision avoidance module library
 #include <AP_Proximity/AP_Proximity.h>      // ArduPilot proximity sensor library
-
+//yhl
+#include <AP_OpenMV/AP_OpenMV.h>
 // Configuration
 #include "defines.h"
 #include "config.h"
@@ -248,7 +249,8 @@ private:
     RC_Channel *channel_yaw;
 
     AP_Logger logger;
-
+    //yhl
+    AP_OpenMV openmv{};
     // flight modes convenience array
     AP_Int8 *flight_modes;
     const uint8_t num_flight_modes = 6;
@@ -688,7 +690,9 @@ private:
     bool get_wp_bearing_deg(float &bearing) const override;
     bool get_wp_crosstrack_error_m(float &xtrack_error) const override;
     bool get_rate_bf_targets(Vector3f& rate_bf_targets) const override;
-
+    //yhl
+    void update_OpenMV(void);
+    
     // Attitude.cpp
     void update_throttle_hover();
     float get_pilot_desired_climb_rate(float throttle_control);

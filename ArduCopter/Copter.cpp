@@ -189,6 +189,8 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
 #endif
     SCHED_TASK_CLASS(AP_Notify,            &copter.notify,              update,          50,  90,  78),
     SCHED_TASK(one_hz_loop,            1,    100,  81),
+    //yhl,这句有报错
+    SCHED_TASK(update_OpenMV,         1,     100,  83),
     SCHED_TASK(ekf_check,             10,     75,  84),
     SCHED_TASK(check_vibration,       10,     50,  87),
     SCHED_TASK(gpsglitch_check,       10,     50,  90),
@@ -255,6 +257,17 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
     SCHED_TASK_CLASS(AP_Stats,             &copter.g2.stats,            update,           1, 100, 171),
 #endif
 };
+//yhl
+void Copter::update_OpenMV(void)
+{
+    
+    if(openmv.update())
+          gcs().send_text(MAV_SEVERITY_CRITICAL, 
+              "The serial is ok");         
+    else
+    gcs().send_text(MAV_SEVERITY_CRITICAL, 
+              "The serial is fail");
+}
 
 void Copter::get_scheduler_tasks(const AP_Scheduler::Task *&tasks,
                                  uint8_t &task_count,
@@ -603,8 +616,9 @@ void Copter::three_hz_loop()
 // one_hz_loop - runs at 1Hz
 void Copter::one_hz_loop()
 {
+    //YHL ADD
     gcs().send_text(MAV_SEVERITY_CRITICAL, 
-                "Current altitude: %.1fm",
+                "openmv:Current altitude: %.1fm",
                  copter.flightmode->get_alt_above_ground_cm() / 100.0f);
     if (should_log(MASK_LOG_ANY)) {
         Log_Write_Data(LogDataID::AP_STATE, ap.value);
